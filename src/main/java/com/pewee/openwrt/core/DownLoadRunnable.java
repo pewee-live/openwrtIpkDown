@@ -33,20 +33,22 @@ public class DownLoadRunnable implements Runnable{
 	
 	@Override
 	public void run() {
-		log.info("开始下载:{}",fileName);
 		FileOutputStream outputStream = null;
 		try {
 			byte[] byteArr = Downloader.getByteArr(url, null);
 			if (null != byteArr) {
 				outputStream = new FileOutputStream( new File(fileStr) );
 				IOUtils.write(byteArr, outputStream);
-				log.info("完成下载:{}",fileName);
+			} else {
+				log.error("文件:\n" + fileName + "\n 下载地址:" + url + "  \n 没有下载成功,请手动下载!!");
 			}
 		} catch (IOException e) {
 			log.error("下载文件:" + fileName + "失败!!",e);
 		} finally {
 			try {
-				outputStream.close();
+				if (null != outputStream) {
+					outputStream.close();
+				}
 			} catch (IOException e) {
 				log.error("系统错误",e);
 			}
