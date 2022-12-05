@@ -25,13 +25,62 @@ public class DownloadController {
 		container.add("");
 	}
 	
-	//下载 https://openwrt.cc/snapshots/packages/aarch64_cortex-a72
+	/**
+	 * 下载固件 url=  https://openwrt.cc/releases/targets/bcm27xx/bcm2711/
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+	@GetMapping("/downloadAllFirmWare")
+	public String downloadAllFirmWare(@RequestParam String url ) throws IOException {
+		log.info("开始下载:{}",url);
+		if (!url.endsWith("/")) {
+			return "url必须以/结尾";
+		}
+		String archType = getArchType(url);
+		String dirStr = "Download/FirmWare/" + archType + "/";
+		File dir = new File(dirStr);
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		String string = Downloader.get(url, null);
+		String[] lines = string.split("\n");
+		int index = 0;
+		String temp = "";
+		for (int i = 0; i <lines.length ;i++ ) {
+			if (lines[i].contains("#file") && index == i -1 ) {
+				String fileName =  temp.substring(temp.indexOf("\"") + 1,temp.lastIndexOf("\"")) ;
+				String filestr = dirStr + fileName;
+				String fileUrl = url + fileName;
+				downloadFirmWare(fileName,filestr,fileUrl);
+			}
+			
+			if (lines[i].contains("href")) {
+				index = i;
+				temp = lines[i];
+			}
+		}
+		return "OK!";
+	}
+	
+	/**
+	 * 下载固件
+	 * @param fileName
+	 * @param filestr
+	 * @param fileUrl
+	 */
+	private void downloadFirmWare(String fileName, String filestr, String fileUrl) {
+		CommonTask.executor.execute(new DownLoadRunnable(filestr, fileName, fileUrl));
+	}
+
+
+	//下载软件包 https://openwrt.cc/snapshots/packages/aarch64_cortex-a72/
 	/**
 	 * 
 	 * @return
 	 * @throws IOException 
 	 */
-	@GetMapping("/download")
+	@GetMapping("/downloadAllSoft")
 	public String downloadUrl(@RequestParam String url ) throws IOException {
 		log.info("开始下载:{}",url);
 		if (!url.endsWith("/")) {
@@ -93,6 +142,7 @@ public class DownloadController {
 	/**
 	 * 获取架构类型
 	 * https://openwrt.cc/snapshots/packages/aarch64_cortex-a72 ---> aarch64_cortex-a72
+	 * https://openwrt.cc/releases/targets/bcm27xx/bcm2711/  ---> bcm2711
 	 * @param url
 	 * @return
 	 */
