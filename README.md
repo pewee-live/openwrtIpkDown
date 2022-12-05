@@ -12,4 +12,10 @@
 
 4. 查看8080端口是否启动成功
 
-5. 下载固件: curl localhost:8080/downloadAllFirmWare?url=https://openwrt.cc/releases/targets/x86/64/  curl localhost:8080/downloadAllFirmWare?url=https://openwrt.cc/releases/targets/bcm27xx/bcm2711/或者下载软件curl localhost:8080/download?url=https://openwrt.cc/snapshots/packages/aarch64_cortex-a72/  curl localhost:8080/download?url=https://openwrt.cc/snapshots/packages/x86_64/ 
+5. 下载固件: 
+    * curl localhost:8080/downloadAllFirmWare?url=https://openwrt.cc/releases/targets/x86/64/  
+    * curl localhost:8080/downloadAllFirmWare?url=https://openwrt.cc/releases/targets/bcm27xx/bcm2711/
+
+6. 下载软件: 
+    * curl localhost:8080/download?url=https://openwrt.cc/snapshots/packages/aarch64_cortex-a72/  
+    * curl localhost:8080/download?url=https://openwrt.cc/snapshots/packages/x86_64/ 
