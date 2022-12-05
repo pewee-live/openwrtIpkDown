@@ -1,6 +1,9 @@
 package com.pewee.openwrt.core;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -12,6 +15,8 @@ import java.util.Map;
 import javax.net.ssl.SSLContext;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
@@ -33,6 +38,8 @@ import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.nio.client.methods.HttpAsyncMethods;
+import org.apache.http.nio.protocol.HttpAsyncResponseConsumer;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
@@ -228,5 +235,30 @@ public class Downloader {
 		 System.arraycopy(data2, 0, data3, data1.length, data2.length); 
 		 return data3; 
 	} 
+	
+	
+	public static InputStream getInputStream(String url,Map<String,String> headers){
+		if(null == headers) {
+			headers = new HashMap<>();
+		}
+		HttpGet get = new HttpGet(url);
+		if(null != headers && headers.size() > 0) {
+			headers.forEach( (k,v)->{
+				get.addHeader(k, v);
+			} );
+		}
+		get.setConfig(rc);
+		try {
+			CloseableHttpResponse response = client.execute(get);
+			HttpEntity entity = response.getEntity();
+			InputStream content = entity.getContent();
+			return content;
+		}	catch (ClientProtocolException e) {
+			log.error(e.getMessage(),e);
+		} catch (IOException e) {
+			log.error(e.getMessage(),e);
+		} 
+		return null;
+	}
 
 }
