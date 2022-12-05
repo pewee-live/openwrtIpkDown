@@ -19,3 +19,5 @@
 6. 下载软件: 
     * curl localhost:8080/download?url=https://openwrt.cc/snapshots/packages/aarch64_cortex-a72/  
     * curl localhost:8080/download?url=https://openwrt.cc/snapshots/packages/x86_64/ 
+
+7. 下载目录在项目根目录Download下
