@@ -5,7 +5,9 @@
 使用教程:
 
 ---
-linux
+## linux
+
+直接下载release中的jar包可以省略1-2步
 
 1. 下载代码:git clone https://github.com/pewee-live/openwrtIpkDown.git
 
@@ -26,7 +28,9 @@ linux
 7. 下载目录在项目根目录Download下
 
 ---
-windows
+## windows
+
+直接下载release中的jar包可以省略1-2步
 
 1. 下载代码:git clone https://github.com/pewee-live/openwrtIpkDown.git
 
